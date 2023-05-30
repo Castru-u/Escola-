@@ -1,7 +1,10 @@
+#Cria a função de cadastro
 def cadastro(parametro):
 
     #Abre os arquivos a serem usados
-    with open("alunos.txt", "a", encoding="utf-8") as alunos, open("turmas.txt", "a", encoding="utf-8") as turmas, open("boletins.txt", "a", encoding="utf-8") as boletins:
+    with open("alunos.txt", "a+", encoding="utf-8") as alunos, open("turmas.txt", "a+", encoding="utf-8") as turmas, open("boletins.txt", "a+", encoding="utf-8") as boletins:
+
+        alunos.write(""), turmas.write(""), boletins.write("")   #Cria os arquivos caso não existam
 
         #Verificam o parametro inserido:
 
@@ -15,10 +18,17 @@ def cadastro(parametro):
             email=input("Insira o email do(a) aluno(a): ")
             telefone=int(input("Insira o telefone do responsável do(a) aluno(a): "))
             turma=int(input("Insira o código de turma: "))
+            
+            turmas.seek(0,0)
+            if str(turma) not in [i.split(" | ")[0] for i in turmas.readlines()]:   #Verifica se o cod. de turma existe no sistema
+                print("Turma inserida não existe no sistema, procure as existentes ou crie uma")
+                
+            else:
+                alunos.seek(0,0)
+                linhas=alunos.readlines()
+                matricula=1+int(linhas[-1].split(" | ")[0]) if linhas!=[] else 1   #Cria o número de matrícula
 
-            matricula=1+alunos.readlines()
-
-                arquivo.write(f"{matricula} | {aluno} | {email} | {telefone}")
+                alunos.write(f"{matricula} | {aluno} | {email} | {telefone} | {turma}\n")   #Adiciona o aluno
 
 
     
