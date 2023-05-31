@@ -65,6 +65,6 @@ def cadastro(parametro):
                 else:
                     situ="Reprovado"
 
-                idboletim=1+int(linhas[-1].split(" | ")[0]) if linhas!=[] else 1   #Cria o ID para o boletim
+                idboletim=1+int(linhas[-1].split(" | ")[0]) if linhas!=[] else 1   #Cria o ID para o boletim  AJEITAR AQUI AAAAAAAAAAAAAAAAAAAAAAAAAA
 
                 turmas.write(f"{idboletim} | {idaluno} | {[nota1,nota2,nota3,nota4]} | {faltas} | {situ}\n")   #Adiociona o boletim
