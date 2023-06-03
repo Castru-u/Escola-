@@ -1,8 +1,8 @@
 from json import *
 import os
 
+#Função para verificar a existência e fazer a criação do arquivo
 def verifica():
-    #Função para verificar a existência e fazer a criação do arquivo
     if not os.path.exists('alunos.json'):
         with open('alunos.json', "w") as arq:
             dump({}, arq)
@@ -74,6 +74,8 @@ def cadastro(parametro):
 
             if idaluno not in load(alunos):
                 print("Matrícula inserida não existe entre os alunos no sistema")
+            elif idaluno in [i["idaluno"] for i in novoboletins.values()]:
+                print("Matrícula inserida já existe nos boletins cadastrados. Tente usar a função 'editar()'")
             else:
                 nota1=float(input("Insira a 1° nota: "))
                 nota2=float(input("Insira a 2° nota: "))
@@ -81,15 +83,14 @@ def cadastro(parametro):
                 nota4=float(input("Insira a 4° nota: "))
                 faltas=int(input("Insira o n° de faltas: "))
                 situ=""
-                if sum[nota1,nota2,nota3,nota4]/4>=7 and int(faltas)<15:   #Vai atribuir a situação do aluno dependendo de suas notas e faltas
+                if sum([nota1,nota2,nota3,nota4])/4>=7 and faltas<15:   #Vai atribuir a situação do aluno dependendo de suas notas e faltas
                     situ="Aprovado"
                 else:
                     situ="Reprovado"
 
                 idboletim=1+list(novoboletins.keys())[-1] if len(novoboletins)>0 else 1   #Cria o ID para o boletim
 
-                novoboletins=load(boletins)    #Cria um dicionário com o arquivo de boletins
-                novoboletins[idboletim]={"notas":[nota1,nota2,nota3,nota4],"faltas":faltas,"situação":situ}   #Adiciona o novo boletim no dicionário    
+                novoboletins[idboletim]={"idaluno":idaluno,"notas":[nota1,nota2,nota3,nota4],"faltas":faltas,"situação":situ}   #Adiciona o novo boletim no dicionário    
 
                 boletins.seek(0,0)
                 dump(novoboletins,boletins,indent=4)   #Adiciona o dicionário com o novo boletim no arquivo
@@ -99,4 +100,8 @@ def cadastro(parametro):
         else:
             #Caso não seja informado um dos parametros acima
             print("Parametro não informado (ALUNO/TURMA/BOLETIM)")
+
+
+
+
         

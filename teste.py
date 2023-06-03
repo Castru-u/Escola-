@@ -1,2 +1,2 @@
 import funcoes
-funcoes.cadastro("ALUNO")
+funcoes.cadastro("BOLETIM")
