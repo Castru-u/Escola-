@@ -1,2 +1,2 @@
-from funcoes import *
-cadastro("ALUNO")
+import funcoes
+funcoes.cadastro("ALUNO")
