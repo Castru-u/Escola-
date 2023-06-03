@@ -101,7 +101,67 @@ def cadastro(parametro):
             #Caso não seja informado um dos parametros acima
             print("Parametro não informado (ALUNO/TURMA/BOLETIM)")
 
+def editar(parametro):
+    verifica()
 
+    #Abre os arquivos a serem usados
+    with open('alunos.json', 'r+') as alunos, open('turmas.json', 'r+') as turmas, open('boletins.json', 'r+') as boletins:
 
+        # Carrega os dados dos arquivos JSON
+        alunos_edit = load(alunos)
+        turmas_edit = load(turmas)
+        boletins_edit = load(boletins)
+        #Verificam o parametro inserido:
 
-        
+        if parametro.upper() == "ALUNO":
+            matricula = input("Digite o numero de matricula do aluno a qual deseje editar algum dado\n: ")
+            
+            
+            if matricula in alunos_edit:
+                perg = input("Qual dado do aluno você deseja editar?\n").lower()
+                if perg == "nome":
+                    nome = input("Digite o novo nome para o(a) aluno:\n")
+                    confirmacao = input(f"Tem certeza de que deseja mudar o nome do(a) aluno para '{nome}'? (s/n)\n")
+
+                    if confirmacao.lower() == "s":
+                        alunos_edit[matricula]["nome"] = nome
+                        print("Nome do(a) aluno atualizado com sucesso!")
+                    else:
+                        print("Operação cancelada. O nome do(a) aluno não foi alterado.")
+                elif perg == "email":
+                    email = input("Digite o novo email para o(a) aluno:\n")
+                    confirmacao = input(f"Tem certeza de que deseja mudar o email do(a) aluno para '{email}'? (s/n)\n")
+
+                    if confirmacao.lower() == "s":
+                        alunos_edit[matricula]["email"] = email
+                        print("email do(a) aluno atualizado com sucesso!")
+                    else:
+                        print("Operação cancelada. O email do(a) aluno não foi alterado.")
+                elif perg == "telefone":
+                    telefone = input("Digite o novo numero de telefone para o(a) aluno:\n")
+                    confirmacao = int(input(f"Tem certeza de que deseja mudar o telefone do(a) aluno para '{telefone}'? (s/n)\n"))
+
+                    if confirmacao.lower() == "s":
+                        alunos_edit[matricula]["telefone"] = telefone
+                        print("telefone do(a) aluno atualizado com sucesso!")
+                    else:
+                        print("Operação cancelada. O telefone do(a) aluno não foi alterado.")                       
+                elif perg == "turma":
+                    turma = input("Digite a nova turma para o(a) aluno:\n")
+                    confirmacao = int(input(f"Tem certeza de que deseja mudar a turma do(a) aluno para '{turma}'? (s/n)\n"))
+
+                    if confirmacao.lower() == "s":
+                        alunos_edit[matricula]["turma"] = turma
+                        print("turma do(a) atualizado com sucesso!")
+                    else:
+                        print("Operação cancelada. a turma do(a) aluno não foi alterado.")
+                
+                
+                else:
+                    print("Opção inválida!")
+              
+
+            else : 
+                print("Nao foi possivel achar a matricula do aluno! tente novamente")
+        alunos.seek(0)  # Move o cursor para o início do arquivo
+        dump(alunos_edit,alunos, indent=4)
