@@ -1,2 +1,3 @@
-import funcoes
-funcoes.cadastro("BOLETIM")
+from funcoes import *
+pesquisa("BOLETIM","nome")
+
