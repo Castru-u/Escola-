@@ -412,6 +412,19 @@ def lista(parametro,parametro2=None):
                     if dados["turma"]==x and bdados["idaluno"]==i and bdados["situação"]=="Reprovado":
                         print(raluno(i,dados,turmas))
                         print(rboletim(z,bdados,"media"))
+                     
+ 
+#Cria a função remover            
+def remover(parametro):
+    verifica()
+    #abre os arquivos a serem removidos
+    with open('alunos.json', 'r+') as alunos, open('turmas.json', 'r+') as turmas, open('boletins.json', 'r+') as boletins:
+        
+        if parametro.upper() == 'ALUNO':
+            matricula = input('Digite o número de matricula do aluno que deseja remover: ')
+            
+            if matricula not in load(alunos):
+                print('O número de matrícula digitado é inválido, tente outro.')
 
 
 
