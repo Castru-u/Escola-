@@ -2,7 +2,7 @@ from json import *
 import os
 
 #Função para retornar turno
-def turno(parametro):
+def rturno(parametro):
     if parametro=="I":
         return "Integrado"
     elif parametro=="M":
@@ -13,28 +13,28 @@ def turno(parametro):
         return "Noturno"
     
 #Função para retornar texto com os dados do aluno organizados
-def aluno(matricula, dados, turmas):
+def raluno(matricula, dados, turmas):
     return f"""
      {matricula}        |    {dados["nome"]}
 {'―'*42}
 |    email    |    {dados["email"]}
 |    telefone |    {dados["telefone"]}
 |    turma    |    {dados["turma"]} - {turmas[dados["turma"]]["nome"]}
-{'―'*42}\n\n
+{'―'*42}
     """
 
 #Função para retornar texto com os dados da turma organizados
-def turma(id, dados):
+def rturma(id, dados):
     return f"""
      {id}        |    {dados["nome"]}
 {'―'*42}
-|    turno    |    {turno(dados["turno"])}
+|    turno    |    {rturno(dados["turno"])}
 |    ano      |    {dados["ano"]}°
-{'―'*42}\n\n
+{'―'*42}\n
     """
 
 #Função para retornar texto com os dados do boletim organizados
-def boletim(id, dados):
+def rboletim(id, dados, media=None):
     return f"""
     Boletim     |      {id}
     Aluno       |      {dados["idaluno"]}
@@ -42,6 +42,7 @@ def boletim(id, dados):
 |   notas       |    {' '.join(map(str,dados["notas"]))}
 |   faltas      |    {dados["faltas"]}
 |   situação    |    {dados["situação"]}
+{f'|   média       |    {sum(dados["notas"])/4}' if media is not None else ""}
 {'―'*42}\n\n
     """
 
@@ -60,7 +61,7 @@ def verifica():
 #Cria a função de cadastro
 def cadastro(parametro):
     verifica()
-
+    os.system('cls')
     #Abre os arquivos a serem usados
     with open('alunos.json','r+') as alunos, open('turmas.json','r+') as turmas, open('boletins.json','r+') as boletins:
 
@@ -79,7 +80,7 @@ def cadastro(parametro):
                 print("Turma inserida não existe no sistema, procure as existentes ou crie uma")
                 
             else:
-                matricula=1+list(novoalunos.keys())[-1] if len(novoalunos)>0 else 1   #Cria o número de matrícula
+                matricula=1+int(list(novoalunos.keys())[-1]) if len(novoalunos)>0 else 1   #Cria o número de matrícula
 
                 novoalunos[matricula]={"nome":aluno,"email":email,"telefone":telefone,"turma":turma} #Adiciona o novo aluno no dicionário
 
@@ -111,6 +112,7 @@ def cadastro(parametro):
                     print("Turma cadastrada com sucesso!\n")
 
         elif parametro.upper() == "BOLETIM":
+            os.system("cls")
             novoboletins=load(boletins)    #Cria um dicionário com o arquivo de boletins
 
             #pede as informações do boletim a ser inserido
@@ -132,7 +134,7 @@ def cadastro(parametro):
                 else:
                     situ="Reprovado"
 
-                idboletim=1+list(novoboletins.keys())[-1] if len(novoboletins)>0 else 1   #Cria o ID para o boletim
+                idboletim=1+int(list(novoboletins.keys())[-1]) if len(novoboletins)>0 else 1   #Cria o ID para o boletim
 
                 novoboletins[idboletim]={"idaluno":idaluno,"notas":[nota1,nota2,nota3,nota4],"faltas":faltas,"situação":situ}   #Adiciona o novo boletim no dicionário    
 
@@ -231,7 +233,7 @@ def pesquisa(parametro,item):
                 for i in alunos:    #Entra na lista de alunos
                     if i==matricula:    #Verifica se a matrícula corresponde com a informada
                         dados=alunos[i]
-                        print(aluno(i,dados,turmas))
+                        print(raluno(i,dados,turmas))
 
             else:    #Caso não tenha nenhuma matrícula correspondente
                 print("Não foi possível achar nenhum aluno com a matrícula informada")
@@ -246,7 +248,7 @@ def pesquisa(parametro,item):
                 for i in alunos:    #Entra na lista de alunos
                     if alunos[i]["nome"]==nome:    #Verifica se o nome corresponde com o informado
                         dados=alunos[i]
-                        print(aluno(i,dados,turmas))
+                        print(raluno(i,dados,turmas))
 
             else:    #Caso o nome não exista entre os alunos
                 print("Não foi possível achar nenhum aluno com o nome informado")
@@ -262,7 +264,7 @@ def pesquisa(parametro,item):
                 for i in turmas:    #Entra na lista de turmas
                     if i==codigo:    #Verifica se o código corresponde com o informado
                         dados=turmas[i]
-                        print(turma(i,dados))
+                        print(rturma(i,dados))
             
             else:    #Caso não exista nenhuma turma com o código inserido
                 print("Não foi possível achar nenhuma turma com o código informado")
@@ -277,7 +279,7 @@ def pesquisa(parametro,item):
                 for i in turmas:    #Entra na lista de turmas
                     if turmas[i]["nome"]==nome:    #Verifica se o nome corresponde com o informado
                         dados=turmas[i]
-                        print(turma(i,dados))
+                        print(rturma(i,dados))
             
             else:    #Caso não exista nenhuma turma com o nome inserido
                 print("Não foi possível achar nenhuma turma com o nome informado")
@@ -292,7 +294,7 @@ def pesquisa(parametro,item):
                 for i in turmas:    #Entra na lista de turmas
                     if turmas[i]["turno"]==turno:    #Verifica se o turno corresponde com o informado
                         dados=turmas[i]
-                        print(turma(i,dados))
+                        print(rturma(i,dados))
 
             elif turno not in ["M","V","N","I"]:
                 print("Turno inserido não existe no sistema ")
@@ -310,7 +312,7 @@ def pesquisa(parametro,item):
                 for i in turmas:    #Entra na lista de turmas
                     if turmas[i]["ano"]==ano:    #Verifica se o ano corresponde com o informado
                         dados=turmas[i]
-                        print(turma(i,dados))
+                        print(rturma(i,dados))
 
             elif int(ano) not in range(1,10):    #Caso o ano inserido não exista dentro do sistema
                 print("Ano inserido não existe no sistema ")
@@ -330,7 +332,7 @@ def pesquisa(parametro,item):
                     dados=boletins[i]
                     if matricula==dados["idaluno"]:    #Checa se a matricula do aluno corresponde com a do boletim
                         os.system("cls")
-                        print(boletim(i,dados))
+                        print(rboletim(i,dados))
 
             else:    #Caso não ache nenhum boletim com a matrícula
                 print("Não foi possível achar nenhum boletim com a matricula informada")
@@ -347,14 +349,70 @@ def pesquisa(parametro,item):
                         dados=boletins[x]
                         if alunos[i]["nome"]==nome and i==dados["idaluno"]:    #Checa se a matricula do aluno corresponde com a do boletim
                             os.system("cls")
-                            print(boletim(x,dados))
+                            print(rboletim(x,dados))
 
             else:    #Caso não ache nenhum boletim com o nome
                 print("Não foi possível achar nenhum boletim com o nome informado")
             
+#Cria a função de listar
+def lista(parametro,parametro2=None):
+    verifica()
+    os.system("cls")
+
+    with open('alunos.json','r+') as alunos, open('turmas.json','r+') as turmas, open('boletins.json','r+') as boletins:
+
+        alunos = load(alunos)
+        turmas = load(turmas)
+        boletins = load(boletins)
+    
+    #Caso deseja listar as turmas
+    if parametro.upper()=="TURMA" and parametro2==None:
+        for i in turmas:
+            dados=turmas[i]
+            print(rturma(i,dados))
+
+    elif parametro.upper()=="ALUNO" and parametro2==None:
+        for x in turmas:
+            print(f"{'―'*42}\n    {x}  |  {turmas[x]['nome']}\n{'―'*42}")
+            for i in alunos:
+                dados=alunos[i]
+                if dados["turma"]==x:
+                    print(raluno(i,dados,turmas))
+
+    elif parametro.upper()=="ALUNO" and parametro2.upper()=="BOLETIM":
+        for x in turmas:
+            print(f"{'―'*42}\n    {x}  |  {turmas[x]['nome']}\n{'―'*42}")
+            for i in alunos:
+                dados=alunos[i]
+                if dados["turma"]==x:
+                    print(raluno(i,dados,turmas))
+                    for z in boletins:
+                        bdados=boletins[z]
+                        if bdados["idaluno"]==i:
+                            print(rboletim(z,bdados,"media"))
+
+    elif parametro.upper()=="ALUNO" and parametro2.upper()=="APROVADOS":
+        for x in turmas:
+            print(f"{'―'*42}\n    {x}  |  {turmas[x]['nome']}\n{'―'*42}")
+            for i in alunos:
+                for z in boletins:
+                    dados=alunos[i]
+                    bdados=boletins[z]
+                    if dados["turma"]==x and bdados["idaluno"]==i and bdados["situação"]=="Aprovado":
+                        print(raluno(i,dados,turmas))
+                        print(rboletim(z,bdados,"media"))
+
+    elif parametro.upper()=="ALUNO" and parametro2.upper()=="REPROVADOS":
+        for x in turmas:
+            print(f"{'―'*42}\n    {x}  |  {turmas[x]['nome']}\n{'―'*42}")
+            for i in alunos:
+                for z in boletins:
+                    dados=alunos[i]
+                    bdados=boletins[z]
+                    if dados["turma"]==x and bdados["idaluno"]==i and bdados["situação"]=="Reprovado":
+                        print(raluno(i,dados,turmas))
+                        print(rboletim(z,bdados,"media"))
 
 
 
                         
-
-
