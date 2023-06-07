@@ -421,6 +421,9 @@ def remover(parametro):
     with open('alunos.json', 'r+') as alunos, open('turmas.json', 'r+') as turmas, open('boletins.json', 'r+') as boletins:
         
         if parametro.upper() == 'ALUNO':
+
+            turma_aluno = input('Digite a turma do aluno que deseja remover: ')
+
             matricula = input('Digite o número de matricula do aluno que deseja remover: ')
             
             if matricula not in load(alunos):
