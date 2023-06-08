@@ -210,7 +210,7 @@ def editar(parametro):
                 print("Nao foi possivel achar a matricula do aluno! tente novamente")
             alunos.seek(0)  # Move o cursor para o início do arquivo
             dump(alunos_edit,alunos, indent=4)
-        if parametro.upper() == "TURMAS":
+        elif parametro.upper() == "TURMAS":
             cod_turma = input("Digite o codigo da turma a qual deseje editar algum dado\n: ")
             if cod_turma in turmas_edit:
                 perg = input("Qual dado da turma você deseja editar?\n").lower()
@@ -250,6 +250,82 @@ def editar(parametro):
                         print("Operação cancelada. O Ano da turma não foi alterado.") 
                 turmas.seek(0)  # Move o cursor para o início do arquivo
                 dump(turmas_edit,turmas, indent=4)
+        elif parametro.upper() == "BOLETIN":
+            print("Para Editar o Boletim Insira o código do mesmo")
+            cod_boletim = input("Digite o Codigo do Boletim\n: ")
+            opcoes = ["faltas","notas"]
+            if cod_boletim in boletins_edit:
+                perg = input("Qual dado do boletim voce deseja editar?\n: ").lower()
+                if perg in opcoes:
+                    nts = [1,2,3,4]
+                    if perg == "notas":
+                        nt = int(input("dentre as 4 notas do aluno qual voce deseja editar? (1°,2°,3°,4°)?\n Digite apenas o numero\n: "))
+                        if nt not in nts :
+                            print("Opçao invalida tente novamente !!")
+                        else:
+                            if nt == 1:
+                                nota = float(input("Digite a nova nota\n: "))
+                                
+                                confirmacao = input(f"Tem certeza de que deseja mudar a nota do Boletin para '{nota}'? (s/n)\n")
+
+                                if confirmacao.lower() == "s":
+                                    boletins_edit[cod_boletim]["notas"][0]  = nota
+                                    print("Nota atualizada com sucesso")
+                                else:
+                                    print("Operação cancelada. A nota não foi alterada.")
+                            if nt == 2:
+                                nota = float(input("Digite a nova nota\n: "))
+                                
+                                confirmacao = input(f"Tem certeza de que deseja mudar a nota do Boletin para '{nota}'? (s/n)\n")
+
+                                if confirmacao.lower() == "s":
+                                    boletins_edit[cod_boletim]["notas"][1]  = nota
+                                    print("Nota atualizada com sucesso")
+                                else:
+                                    print("Operação cancelada. A nota não foi alterada.")    
+                            if nt == 3:
+                                nota = float(input("Digite a nova nota\n: "))
+                                
+                                confirmacao = input(f"Tem certeza de que deseja mudar a nota do Boletin para '{nota}'? (s/n)\n")
+
+                                if confirmacao.lower() == "s":
+                                    boletins_edit[cod_boletim]["notas"][2]  = nota
+                                    print("Nota atualizada com sucesso")
+                                else:
+                                    print("Operação cancelada. A nota não foi alterada.")
+                            if nt == 4:
+                                nota = float(input("Digite a nova nota\n: "))
+                                
+                                confirmacao = input(f"Tem certeza de que deseja mudar a nota do Boletin para '{nota}'? (s/n)\n")
+
+                                if confirmacao.lower() == "s":
+                                    boletins_edit[cod_boletim]["notas"][3]  = nota
+                                    print("Nota atualizada com sucesso")
+                                else:
+                                    print("Operação cancelada. A nota não foi alterada.")
+                    if perg == "faltas":
+                        print("Houve um erro na quantidade de faltas do aluno?")
+                        falt = int(input("Digite a nova quantidade de faltas do aluno\n: "))
+                        
+                        confirmacao = input(f"Tem certeza de que deseja mudar a quantidade de faltas do aluno para '{falt}'? (s/n)\n")
+
+                        if confirmacao.lower() == "s":
+                            boletins_edit[cod_boletim]["faltas"] = falt
+                            print("Quantidade de faltas atualizada com sucesso")
+                        else:
+                            print("Operação cancelada. A quantidade de faltas não foi alterada.")
+                    if sum(boletins_edit[cod_boletim]["notas"])/4>=7 and boletins_edit[cod_boletim]["faltas"] < 15:   #Vai atribuir a situação do aluno dependendo de suas notas e faltas
+                        situ="Aprovado"
+                        boletins_edit[cod_boletim]["situa\u00e7\u00e3o"] = situ
+                    else:
+                        situ="Reprovado"
+                        boletins_edit[cod_boletim]["situa\u00e7\u00e3o"] = situ              
+                
+                else:
+                    print("A opção nao existe ou voce nao tem permissão para muda-la")
+            boletins.seek(0)  # Move o cursor para o início do arquivo
+            dump(boletins_edit,boletins, indent=4)    
+            
 #Cria a função de pesquisa
 def pesquisa(parametro,item):
     verifica()

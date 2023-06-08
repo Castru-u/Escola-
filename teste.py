@@ -1,3 +1,3 @@
 from funcoes import *
-pesquisa("BOLETIM","nome")
+editar("BOLETIN")
 
