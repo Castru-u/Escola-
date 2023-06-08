@@ -213,7 +213,7 @@ def editar(parametro):
         if parametro.upper() == "TURMAS":
             cod_turma = input("Digite o codigo da turma a qual deseje editar algum dado\n: ")
             if cod_turma in turmas_edit:
-                perg = input("Qual dado do aluno você deseja editar?\n").lower()
+                perg = input("Qual dado da turma você deseja editar?\n").lower()
                 if perg == "nome":
                     nome = input("Digite um novo nome para a turma\n: ")
                     confirmacao = input(f"Tem certeza de que deseja mudar o nome da turma para '{nome}'? (s/n)\n")
