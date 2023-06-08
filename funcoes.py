@@ -208,9 +208,48 @@ def editar(parametro):
               
             else : 
                 print("Nao foi possivel achar a matricula do aluno! tente novamente")
-        alunos.seek(0)  # Move o cursor para o início do arquivo
-        dump(alunos_edit,alunos, indent=4)
+            alunos.seek(0)  # Move o cursor para o início do arquivo
+            dump(alunos_edit,alunos, indent=4)
+        if parametro.upper() == "TURMAS":
+            cod_turma = input("Digite o codigo da turma a qual deseje editar algum dado\n: ")
+            if cod_turma in turmas_edit:
+                perg = input("Qual dado do aluno você deseja editar?\n").lower()
+                if perg == "nome":
+                    nome = input("Digite um novo nome para a turma\n: ")
+                    confirmacao = input(f"Tem certeza de que deseja mudar o nome da turma para '{nome}'? (s/n)\n")
 
+                    if confirmacao.lower() == "s":
+                        turmas_edit[cod_turma]["nome"] = nome
+                        print("Nome do(a) aluno atualizado com sucesso!")
+                    else:
+                        print("Operação cancelada. O nome da turma não foi alterado.") 
+                elif perg == "turno":
+                    turno=(input("Insira o novo turno para a turma\nTurnos disponiveis '(M/T/N/I)': "))
+                    
+                    if turno.upper() not in ["M","T","N","I"]:
+                        print("Turno inserido não existe")
+                    else:
+                        confirmacao = input(f"Tem certeza de que deseja mudar o turno da turma para '{turno}'? (s/n)\n")
+
+                    if confirmacao.lower() == "s":
+                        turmas_edit[cod_turma]["turno"] = turno
+                        print("Turno da turma atualizado com sucesso!")
+                    else:
+                        print("Operação cancelada. O Turno da turma não foi alterado.")
+
+                elif perg == "ano":
+                    ano=input("Insira o novo ano da turma(1-9): ")
+                    if int(ano) not in range(1,10):
+                        print("Ano inserido não existe")
+                    else:
+                        confirmacao = input(f"Tem certeza de que deseja mudar o ano da turma para '{ano}'? (s/n)\n")
+                    if confirmacao.lower() == "s":
+                        turmas_edit[cod_turma]["ano"] = ano
+                        print("Ano da turma atualizado com sucesso!")
+                    else:
+                        print("Operação cancelada. O Ano da turma não foi alterado.") 
+                turmas.seek(0)  # Move o cursor para o início do arquivo
+                dump(turmas_edit,turmas, indent=4)
 #Cria a função de pesquisa
 def pesquisa(parametro,item):
     verifica()
