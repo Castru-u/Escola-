@@ -250,7 +250,7 @@ def editar(parametro):
                         print("Operação cancelada. O Ano da turma não foi alterado.") 
                 turmas.seek(0)  # Move o cursor para o início do arquivo
                 dump(turmas_edit,turmas, indent=4)
-        elif parametro.upper() == "BOLETIN":
+        elif parametro.upper() == "BOLETIM":
             print("Para Editar o Boletim Insira o código do mesmo")
             cod_boletim = input("Digite o Codigo do Boletim\n: ")
             opcoes = ["faltas","notas"]
@@ -543,6 +543,26 @@ def remover(parametro):
             
             if matricula not in load(alunos):
                 print('O número de matrícula digitado é inválido, tente outro.')
+
+#Cria a função de gerar relatório
+def relatorio():
+    verifica()
+    os.system('cls')
+
+    with open('relatorio.txt', 'w') as relatorio, open('alunos.json','r+') as alunos, open('turmas.json','r+') as turmas, open('boletins.json','r+') as boletins:    #Abre o arquivo a ser criado o relatório e os arquivos do sistema
+
+        # Carrega os dados dos arquivos JSON
+        alunos= load(alunos)
+        turmas= load(turmas)
+        boletins= load(boletins)
+
+        #Relata o total de turmas
+        tturmas=len(turmas)
+
+        #Relata o total de alunos por turma
+        for i in turmas:
+            for x in alunos:
+                if alunos[x]
 
 
 
