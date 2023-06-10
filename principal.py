@@ -1,3 +1,2 @@
 from funcoes import *
-editar("BOLETIN")
-
+menu()

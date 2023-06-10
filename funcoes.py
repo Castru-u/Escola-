@@ -40,9 +40,9 @@ def rboletim(id, dados, media=None):
     Aluno       |      {dados["idaluno"]}
 {'―'*42}
 |   notas       |    {' '.join(map(str,dados["notas"]))}
+|   média       |    {sum(dados["notas"])/4}
 |   faltas      |    {dados["faltas"]}
 |   situação    |    {dados["situação"]}
-{f'|   média       |    {sum(dados["notas"])/4}' if media is not None else ""}
 {'―'*42}\n\n
     """
 
@@ -144,8 +144,7 @@ def cadastro(parametro):
                 print("Boletim cadastrado com sucesso!\n")
 
         else:
-            #Caso não seja informado um dos parametros acima
-            print("Parametro não informado (ALUNO/TURMA/BOLETIM)")
+            print("Parametro inserido inválido")   
 
 #Cria a função de edição
 def editar(parametro):
@@ -210,7 +209,7 @@ def editar(parametro):
                 print("Nao foi possivel achar a matricula do aluno! tente novamente")
             alunos.seek(0)  # Move o cursor para o início do arquivo
             dump(alunos_edit,alunos, indent=4)
-        elif parametro.upper() == "TURMAS":
+        elif parametro.upper() == "TURMA":
             cod_turma = input("Digite o codigo da turma a qual deseje editar algum dado\n: ")
             if cod_turma in turmas_edit:
                 perg = input("Qual dado da turma você deseja editar?\n").lower()
@@ -324,7 +323,10 @@ def editar(parametro):
                 else:
                     print("A opção nao existe ou voce nao tem permissão para muda-la")
             boletins.seek(0)  # Move o cursor para o início do arquivo
-            dump(boletins_edit,boletins, indent=4)    
+            dump(boletins_edit,boletins, indent=4) 
+
+        else:
+            print("Parametro inserido inválido")   
             
 #Cria a função de pesquisa
 def pesquisa(parametro,item):
@@ -368,6 +370,9 @@ def pesquisa(parametro,item):
             else:    #Caso o nome não exista entre os alunos
                 print("Não foi possível achar nenhum aluno com o nome informado")
 
+        else:
+            print("Segundo parametro inserido ininválido")
+
     elif parametro.upper()=="TURMA":
 
         #Caso queira achar pelo código de turma
@@ -385,7 +390,7 @@ def pesquisa(parametro,item):
                 print("Não foi possível achar nenhuma turma com o código informado")
 
         #Caso queira achar pelo nome da turma
-        if item=="nome":
+        elif item=="nome":
             nome=input("Insira o nome da turma que deseja achar\n:")    #Pede o nome da turma a ser procurada
 
             if nome in [i["nome"] for i in turmas.values()]:    #Checa se o nome existe entre as turmas
@@ -400,7 +405,7 @@ def pesquisa(parametro,item):
                 print("Não foi possível achar nenhuma turma com o nome informado")
 
         #Caso queira achar pelo turno da turma
-        if item=="turno":
+        elif item=="turno":
             turno=input("Insira o turno da turma que deseja achar(M/V/N/I)\n:").upper()    #Pede o turno da turma a ser procurada
 
             if turno in [i["turno"] for i in turmas.values()]:    #Checa se o turno existe entre as turmas
@@ -418,7 +423,7 @@ def pesquisa(parametro,item):
                 print("Não foi possível achar nenhuma turma com o turno informado")
 
         #Caso queira achar pelo ano da turma
-        if item=="ano":
+        elif item=="ano":
             ano=input("Insira o ano da turma que deseja achar\n:").upper()    #Pede o ano da turma a ser procurada
 
             if ano in [i["ano"] for i in turmas.values()]:    #Checa se o ano existe entre as turmas
@@ -434,6 +439,9 @@ def pesquisa(parametro,item):
         
             else:    #Caso não exista nenhuma turma com o ano inserido
                 print("Não foi possível achar nenhuma turma com o ano informado")
+            
+        else:
+            print("Segundo parametro inserido inválido")
         
     elif parametro.upper()=="BOLETIM":
         
@@ -468,7 +476,12 @@ def pesquisa(parametro,item):
 
             else:    #Caso não ache nenhum boletim com o nome
                 print("Não foi possível achar nenhum boletim com o nome informado")
-            
+
+        else:
+            print("Segundo parametro inserido ininválido")
+    else:
+        print("Primeiro parametro inserido inválido")
+        
 #Cria a função de listar
 def lista(parametro,parametro2=None):
     verifica()
@@ -486,7 +499,7 @@ def lista(parametro,parametro2=None):
             dados=turmas[i]
             print(rturma(i,dados))
 
-    elif parametro.upper()=="ALUNO" and parametro2==None:
+    elif parametro.upper()=="ALUNO" and parametro2.upper()=="NORMAL":
         for x in turmas:
             print(f"{'―'*42}\n    {x}  |  {turmas[x]['nome']}\n{'―'*42}")
             for i in alunos:
@@ -527,29 +540,109 @@ def lista(parametro,parametro2=None):
                     if dados["turma"]==x and bdados["idaluno"]==i and bdados["situação"]=="Reprovado":
                         print(raluno(i,dados,turmas))
                         print(rboletim(z,bdados,"media"))
+
+    else:
+            print("Insira um parametro válido")
                      
  
 #Cria a função remover            
 def remover(parametro):
     verifica()
-    #abre os arquivos a serem removidos
+    #abre os arquivos
     with open('alunos.json', 'r+') as alunos, open('turmas.json', 'r+') as turmas, open('boletins.json', 'r+') as boletins:
         
-        if parametro.upper() == 'ALUNO':
+        # Carrega os dados dos arquivos JSON
+        lalunos= load(alunos)
+        lturmas= load(turmas)
+        lboletins= load(boletins)
 
-            turma_aluno = input('Digite a turma do aluno que deseja remover: ')
+        if parametro.upper() == 'ALUNO':    #Caso deseja ser removido um aluno
 
             matricula = input('Digite o número de matricula do aluno que deseja remover: ')
             
-            if matricula not in load(alunos):
+            if matricula not in lalunos:    #Caso o n° de matrícula não exista no sistema
                 print('O número de matrícula digitado é inválido, tente outro.')
+
+            else:
+                nalunos={}    #Cria um novo dicionário
+                for i in lalunos:
+                    dados=lalunos[i]
+                    if i!=matricula:
+                        nalunos[i]=dados     #Adiciona todos os alunos, menos o a ser removido
+                alunos.seek(0,0)
+                dump(nalunos,alunos,indent=4)    #Adiciona o dicionário ao arquivo de alunos
+                alunos.truncate()    #Apaga o restante do conteúdo do arquivo
+
+                #remove o boletim do aluno
+                nboletins={}    #Cria um novo dicionário
+                for i in lboletins:
+                    dados=lboletins[i]
+                    if dados["idaluno"]!=matricula:
+                        nboletins[i]=dados     #Adiciona todos os boletins, menos o do aluno
+                boletins.seek(0,0)
+                dump(nboletins,boletins,indent=4)    #Adiciona o dicionário ao arquivo de boletins
+                boletins.truncate()    #Apaga o restante do conteúdo do arquivo
+
+                print("Aluno removido!")
+
+        elif parametro.upper() == 'TURMA':    #Caso deseja ser removido uma turma
+
+            num = input('Digite o número da turma que deseja remover: ')
+            
+            if num not in lturmas:    #Caso o n° de turma não exista no sistema
+                print('O número de turma digitado é inválido, tente outro.')
+
+            else:
+                nturmas={}    #Cria um novo dicionário
+                for i in lturmas:
+                    dados=lturmas[i]
+                    if i!=num:
+                        nturmas[i]=dados    #Adiciona todas as turmas, menos a que vai ser removida
+                turmas.seek(0,0)
+                dump(nturmas,turmas,indent=4)   #Adiciona o dicionário ao arquivo de turmas
+                turmas.truncate()    #Apaga o restante do conteúdo do arquivo
+
+                #Remove os alunos pertencentes a turma
+                nalunos={}    #Cria um novo dicionário
+                for i in lalunos:
+                    dados=lalunos[i]
+                    if dados["turma"]!=num:    #Caso o aluno não pertença a turma
+                        nalunos[i]=dados     #Adiciona todos os alunos, menos os pertencentes a turma
+                alunos.seek(0,0)
+                dump(nalunos,alunos,indent=4)    #Adiciona o dicionário ao arquivo de alunos
+                alunos.truncate    #Apaga o restante do conteúdo do arquivo
+
+                print("Turma removida!")
+
+        elif parametro.upper() == 'BOLETIM':    #Caso deseja ser removido um boletim
+
+                boletim = input('Digite o número do boletim que deseja remover: ')
+                
+                if boletim not in lboletins:    #Caso o boletim não exista no sistema
+                    print('O número de boletim digitado é inválido, tente outro.')
+
+                else:
+                    nboletins={}    #Cria um novo dicionário
+                    for i in lboletins:
+                        dados=lboletins[i]
+                        if i!=boletim:
+                            nboletins[i]=dados     #Adiciona todos os boletins, menos o a ser removido
+                    boletins.seek(0,0)
+                    dump(nboletins,boletins,indent=4)    #Adiciona o dicionário ao arquivo de boletins
+                    boletins.truncate()    #Apaga o restante do conteúdo do arquivo
+
+                    print("Boletim removido!")
+
+        else:
+            print("Insira um parametro válido")
+
 
 #Cria a função de gerar relatório
 def relatorio():
     verifica()
     os.system('cls')
 
-    with open('relatorio.txt', 'w') as relatorio, open('alunos.json','r+') as alunos, open('turmas.json','r+') as turmas, open('boletins.json','r+') as boletins:    #Abre o arquivo a ser criado o relatório e os arquivos do sistema
+    with open('relatorio.txt', 'w',encoding='utf-8') as relatorio, open('alunos.json','r+') as alunos, open('turmas.json','r+') as turmas, open('boletins.json','r+') as boletins:    #Abre o arquivo a ser criado o relatório e os arquivos do sistema
 
         # Carrega os dados dos arquivos JSON
         alunos= load(alunos)
@@ -557,13 +650,118 @@ def relatorio():
         boletins= load(boletins)
 
         #Relata o total de turmas
-        tturmas=len(turmas)
+        relatorio.write(f"""    RELATÓRIO
+{'_'*42}\n
+    Total de turmas : {len(turmas)}
+{'_'*42}\n
+        """)
 
-        #Relata o total de alunos por turma
-        for i in turmas:
-            for x in alunos:
-                if alunos[x]
+        for i in turmas:    #Entra na lista de turmas
+            talunos,tapro,trepro,acimalimit,abaixolimit,medias=0,0,0,0,0,[]    #Cria as variáveis para armazenar os relatórios por turma
+            tdados=turmas[i]
+            for x in alunos:    #Entra na lista de aluno
+                dados=alunos[x]
+                if dados["turma"]==i:    #Confere se o aluno pertence a turma
+                    talunos+=1
+                    for z in boletins:    #Entra na lista de boletins
+                        bdados=boletins[z]
+                        if bdados["idaluno"]==x:    #Confere se o boletim pertence ao aluno
+                            if bdados["situação"]=="Aprovado":    #Se o aluno estiver aprovado
+                                tapro+=1
+                            elif bdados["situação"]=="Reprovado":    #Se o aluno estiver reprovado
+                                trepro+=1
+                            if bdados["faltas"]>=15:    #Se o aluno passar do limite de faltas
+                                acimalimit+=1
+                            else:    #Se o aluno estiver dentro do limite de faltas
+                                abaixolimit+=1
+                            medias.append(sum(bdados["notas"])/4)    #Salva a média do Aluno
+
+            relatorio.write(f"""
+    {i}  |  {tdados['nome']}    
+{'='*42}
+        Total de alunos : {talunos}
+        Total de alunos aprovados : {tapro}
+        Total de alunos reprovados : {trepro}
+        Maior média : {max(medias) if len(medias)>0 else 'Nenhuma média disponível'}
+        Menor média : {min(medias) if len(medias)>0 else 'Nenhuma média disponível'}
+        Alunos acima do limite de falta : {acimalimit}
+        Alunos abaixo do limite de falta : {abaixolimit}
+            
+            """)    #Escreve no arquivo o relatório dos dados da turma
+    
+    print("Relatório gerado.\nTente checar o arquivo 'relatório' ")
+
+#Cria a função de menu
+def menu():
+    while True:
+        print(f"""
+{'‾'*42}\n{' '*18}ESCOLA\n{'_'*42}
+
+    1 - Cadastrar
+    2 - Editar
+    3 - Remover
+    4 - Pesquisar
+    5 - Listar
+    6 - Relatório
+    7 - Créditos
+    0 - Sair
+{'_'*42}
+""")
+        r=input("")
+        os.system('cls')
+
+        if r=='1':
+            prmt=input("Insira o tipo que você quer cadastrar (ALUNO/TURMA/BOLETIM)\n: ")
+            cadastro(prmt)
+        elif r=='2':
+            prmt=input("Insira o tipo que você quer editar (ALUNO/TURMA/BOLETIM)\n: ")
+            editar(prmt)
+        elif r=='3':
+            prmt=input("Insira o tipo que você quer remover (ALUNO/TURMA/BOLETIM)\n: ")
+            remover(prmt)
+        elif r=='4':
+            prmt=input("""
+Insira o tipo que você quer pesquisar e o item a ser usado como referência
+ALUNO - (matricula/nome)
+TURMA - (codigo/turno/nome/ano)
+BOLETIM - (matricula/nome)
+tipo: """)
+            item=input("item:")
+            pesquisa(prmt,item)
+        elif r=='5':
+            prmt=input("Insira o que você quer listar (ALUNO/TURMA)")
+            if prmt.upper()=='ALUNO':
+                prmt2=input("""
+Deseja adicionar outra dessas opções?
+NORMAL - Lista apenas os alunos
+BOLETIM - Lista os alunos com os respectivos boletins
+APROVADOS - Lista os alunos aprovados com os boletins
+REPROVADOS - Lista os alunos reprovados com os boletins
+: """)
+                lista(prmt,prmt2)
+            else:
+                lista(prmt)
+        elif r=='6':
+            relatorio()
+        elif r=='7':
+            print("""
+Integrantes:
+    Amanda
+    Eric
+    Gustavo Medeiros
+    Gustavo de Souza
+    João Pedro
+    Layla
+    Luiz
+    Noemi
+    Sofia\n\n
+Agradecimentos:
+    Pepe Moreno
+    Bruno Henrique do Flamengo
+    Adam Sandler            
+            """)
+        elif r=='0':
+            print("Hasta la vista, Baby!")
+            break
 
 
-
-                        

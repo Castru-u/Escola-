@@ -1,0 +1,40 @@
+    RELATÓRIO
+__________________________________________
+
+    Total de turmas : 3
+__________________________________________
+
+        
+    1  |  info    
+==========================================
+        Total de alunos : 3
+        Total de alunos aprovados : 1
+        Total de alunos reprovados : 0
+        Maior média : 10.0
+        Menor média : 10.0
+        Alunos acima do limite de falta : 0
+        Alunos abaixo do limite de falta : 1
+            
+            
+    2  |  agro    
+==========================================
+        Total de alunos : 0
+        Total de alunos aprovados : 0
+        Total de alunos reprovados : 0
+        Maior média : Nenhuma média disponível
+        Menor média : Nenhuma média disponível
+        Alunos acima do limite de falta : 0
+        Alunos abaixo do limite de falta : 0
+            
+            
+    3  |  Cabaços    
+==========================================
+        Total de alunos : 1
+        Total de alunos aprovados : 0
+        Total de alunos reprovados : 1
+        Maior média : 7.0
+        Menor média : 7.0
+        Alunos acima do limite de falta : 1
+        Alunos abaixo do limite de falta : 0
+            
+            
