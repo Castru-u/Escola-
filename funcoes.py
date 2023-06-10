@@ -758,7 +758,9 @@ Integrantes:
 Agradecimentos:
     Pepe Moreno
     Bruno Henrique do Flamengo
-    Adam Sandler            
+    Adam Sandler   
+    Dj Azeitona
+    Thorfinn Karlsefni
             """)
         elif r=='0':
             print("Hasta la vista, Baby!")
