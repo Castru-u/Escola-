@@ -121,7 +121,7 @@ def cadastro(parametro):
             if idaluno not in load(alunos):
                 print("Matrícula inserida não existe entre os alunos no sistema")
             elif idaluno in [i["idaluno"] for i in novoboletins.values()]:
-                print("Matrícula inserida já existe nos boletins cadastrados. Tente usar a função 'editar()'")
+                print("Matrícula inserida já existe nos boletins cadastrados. Tente novamente'")
             else:
                 nota1=float(input("Insira a 1° nota: "))
                 nota2=float(input("Insira a 2° nota: "))
@@ -194,13 +194,16 @@ def editar(parametro):
                         print("Operação cancelada. O telefone do(a) aluno não foi alterado.")                       
                 elif perg == "turma":
                     turma = input("Digite a nova turma para o(a) aluno:\n")
-                    confirmacao = input(f"Tem certeza de que deseja mudar a turma do(a) aluno para '{turma}'? (s/n)\n")
-
-                    if confirmacao.lower() == "s":
-                        alunos_edit[matricula]["turma"] = turma
-                        print("turma do(a) atualizado com sucesso!")
+                    if turma not in turmas_edit:
+                        print("Código de turma inserido não existe no sistema! tente novamente")
                     else:
-                        print("Operação cancelada. a turma do(a) aluno não foi alterado.")
+                        confirmacao = input(f"Tem certeza de que deseja mudar a turma do(a) aluno para '{turma}'? (s/n)\n")
+
+                        if confirmacao.lower() == "s":
+                            alunos_edit[matricula]["turma"] = turma
+                            print("turma do(a) atualizado com sucesso!")
+                        else:
+                            print("Operação cancelada. a turma do(a) aluno não foi alterado.")
                 
                 else:
                     print("Opção inválida!")
@@ -209,6 +212,7 @@ def editar(parametro):
                 print("Nao foi possivel achar a matricula do aluno! tente novamente")
             alunos.seek(0)  # Move o cursor para o início do arquivo
             dump(alunos_edit,alunos, indent=4)
+            alunos.truncate()
         elif parametro.upper() == "TURMA":
             cod_turma = input("Digite o codigo da turma a qual deseje editar algum dado\n: ")
             if cod_turma in turmas_edit:
@@ -249,6 +253,7 @@ def editar(parametro):
                         print("Operação cancelada. O Ano da turma não foi alterado.") 
                 turmas.seek(0)  # Move o cursor para o início do arquivo
                 dump(turmas_edit,turmas, indent=4)
+                turmas.truncate()
         elif parametro.upper() == "BOLETIM":
             print("Para Editar o Boletim Insira o código do mesmo")
             cod_boletim = input("Digite o Codigo do Boletim\n: ")
@@ -324,6 +329,7 @@ def editar(parametro):
                     print("A opção nao existe ou voce nao tem permissão para muda-la")
             boletins.seek(0)  # Move o cursor para o início do arquivo
             dump(boletins_edit,boletins, indent=4) 
+            boletins.truncate()
 
         else:
             print("Parametro inserido inválido")   

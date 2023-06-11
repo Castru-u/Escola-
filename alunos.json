@@ -1,0 +1,20 @@
+{
+    "1": {
+        "nome": "Jo\u00e3o",
+        "email": "joao@",
+        "telefone": "99123",
+        "turma": "1"
+    },
+    "2": {
+        "nome": "Lucas",
+        "email": "nsei@",
+        "telefone": "991192413",
+        "turma": "2"
+    },
+    "3": {
+        "nome": "Ender",
+        "email": "Dragon@",
+        "telefone": "66",
+        "turma": "3"
+    }
+}
