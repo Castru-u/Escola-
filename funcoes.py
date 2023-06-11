@@ -73,7 +73,7 @@ def cadastro(parametro):
             #Pede as informações do aluno a ser inserido
             aluno=input("Insira o nome do(a) aluno(a): ")
             email=input("Insira o email do(a) aluno(a): ")
-            telefone=int(input("Insira o telefone do responsável do(a) aluno(a): "))
+            telefone=input("Insira o telefone do responsável do(a) aluno(a): ")
             turma=input("Insira o código de turma: ")
             
             if turma not in load(turmas):   #Verifica se o cod. de turma existe no sistema
@@ -185,7 +185,7 @@ def editar(parametro):
                         print("Operação cancelada. O email do(a) aluno não foi alterado.")
                 elif perg == "telefone":
                     telefone = input("Digite o novo numero de telefone para o(a) aluno:\n")
-                    confirmacao = int(input(f"Tem certeza de que deseja mudar o telefone do(a) aluno para '{telefone}'? (s/n)\n"))
+                    confirmacao = input(f"Tem certeza de que deseja mudar o telefone do(a) aluno para '{telefone}'? (s/n)\n")
 
                     if confirmacao.lower() == "s":
                         alunos_edit[matricula]["telefone"] = telefone
@@ -194,7 +194,7 @@ def editar(parametro):
                         print("Operação cancelada. O telefone do(a) aluno não foi alterado.")                       
                 elif perg == "turma":
                     turma = input("Digite a nova turma para o(a) aluno:\n")
-                    confirmacao = int(input(f"Tem certeza de que deseja mudar a turma do(a) aluno para '{turma}'? (s/n)\n"))
+                    confirmacao = input(f"Tem certeza de que deseja mudar a turma do(a) aluno para '{turma}'? (s/n)\n")
 
                     if confirmacao.lower() == "s":
                         alunos_edit[matricula]["turma"] = turma
